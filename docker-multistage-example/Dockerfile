@@ -12,3 +12,4 @@ FROM debian:10
 RUN mkdir -p /ninjam
 WORKDIR /ninjam
 COPY --from=builder /ninjam/ninjam/server/ninjamsrv /usr/bin/ninjamsrv
+
