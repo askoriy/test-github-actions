@@ -1,0 +1,30 @@
+name: Pipeline git commands
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - .github/workflows/pipeline-git-commands.yaml
+
+jobs:
+  pipeline-git-commands:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Run git commands
+        if: ${{ false }}
+        run: |
+          set -x
+          git log --oneline --all --graph
+          git status
+          git tag $(date +%Y-%m-%d_%H-%M-%S) HEAD
+          date > release-date
+          git config --global user.email "you@example.com"
+          git config --global user.name "Your Name"
+          git add release-date
+          git commit -m "Update release date"
+          #git push --tags
+          git push --tags https://github.com/askoriy/test-github-actions.git HEAD:master
+          echo released
