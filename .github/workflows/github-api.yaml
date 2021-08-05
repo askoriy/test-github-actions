@@ -1,0 +1,36 @@
+name: Github API call
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - .github/workflows/github-api.yaml
+
+jobs:
+  github-script:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Run github script
+        uses: actions/github-script@v3
+        id: set-result
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const { data: pullRequests } = await github.pulls.list({
+              owner,
+              repo,
+              state: 'open',
+            });
+            //console.log(pullRequests);
+            for (const pr of pullRequests) {
+              console.log('---------------- PR ----------------');
+              console.log(pr);
+              console.log('------------------------------------');
+            };
+          result-encoding: string
+
+      - name: Get result
+        run: echo "${{steps.set-result.outputs.result}}"
